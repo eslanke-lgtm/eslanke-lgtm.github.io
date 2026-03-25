@@ -26,49 +26,66 @@
   }).addTo(map);
 
   // DEMARCACIÓN
-  fetch('demarcacion.geojson')
-    .then(res => res.json())
-    .then(data => {
-      L.geoJSON(data, {
-        style: {
-          color: "black",
-          weight: 2,
-          fillOpacity: 0
-        }
-      }).addTo(map);
-    });
+  var demarcacionLayer;
 
-  // COLINDANTES
-  fetch('colindantes.geojson')
+fetch('demarcacion.geojson')
   .then(res => res.json())
   .then(data => {
-    var colindantesLayer = L.geoJSON(data, {
+    demarcacionLayer = L.geoJSON(data, {
       style: {
-        color: "red",
-        weight: 3,
-        fillColor: "red",
-        fillOpacity: 0.4
+        color: "black",
+        weight: 2,
+        fillOpacity: 0
       }
     }).addTo(map);
+  });
+
+  // COLINDANTES
+  var colindantesLayer;
+
+fetch('colindantes.geojson')
+  .then(res => res.json())
+  .then(data => {
+    colindantesLayer = L.geoJSON(data, {
+      style: {
+        color: "#666",
+        weight: 1,
+        fillOpacity: 0.2
+      }
+    }).addTo(map);
+  });
 
     // 🔥 AJUSTAR MAPA A LA CAPA
     map.fitBounds(colindantesLayer.getBounds());
   });
 
   // ÁREAS VERDES
-  fetch('areas_verdes.geojson')
-    .then(res => res.json())
-    .then(data => {
-      L.geoJSON(data, {
-        style: {
-          color: "green",
-          fillColor: "green",
-          fillOpacity: 0.5
-        }
-      }).addTo(map);
-    });
+  var areasLayer;
+
+fetch('areas_verdes.geojson')
+  .then(res => res.json())
+  .then(data => {
+    areasLayer = L.geoJSON(data, {
+      style: {
+        color: "green",
+        fillColor: "green",
+        fillOpacity: 0.5
+      }
+    }).addTo(map);
+  });
 
 </script>
 
 </body>
 </html>
+setTimeout(() => {
+  var baseMaps = {};
+
+  var overlayMaps = {
+    "Demarcación municipal": demarcacionLayer,
+    "Municipios colindantes": colindantesLayer,
+    "Áreas verdes": areasLayer
+  };
+
+  L.control.layers(baseMaps, overlayMaps).addTo(map);
+}, 1000);
