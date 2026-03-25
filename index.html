@@ -28,26 +28,48 @@
   var demarcacionLayer, colindantesLayer, areasLayer;
 
   // DEMARCACIÓN (con popup)
-  fetch('demarcacion.geojson')
-    .then(res => res.json())
-    .then(data => {
-      demarcacionLayer = L.geoJSON(data, {
-        style: {
-          color: "black",
-          weight: 2,
-          fillOpacity: 0
-        },
-        onEachFeature: function (feature, layer) {
-          if (feature.properties) {
-            layer.bindPopup(
-              "<b>Municipio:</b> " + 
-              (feature.properties.NOMGEO || "")
-            );
-          }
-        }
-      }).addTo(map);
-    });
+ fetch('demarcacion.geojson')
+  .then(res => res.json())
+  .then(data => {
 
+    function highlightFeature(e) {
+      var layer = e.target;
+      layer.setStyle({
+        weight: 3,
+        color: "#00BFFF",
+        fillOpacity: 0.1
+      });
+    }
+
+    function resetHighlight(e) {
+      demarcacionLayer.resetStyle(e.target);
+    }
+
+    demarcacionLayer = L.geoJSON(data, {
+      style: {
+        color: "black",
+        weight: 2,
+        fillOpacity: 0
+      },
+      onEachFeature: function (feature, layer) {
+
+        // Popup
+        if (feature.properties) {
+          layer.bindPopup(
+            "<b>Municipio:</b> " + 
+            (feature.properties.NOMGEO || "")
+          );
+        }
+
+        // Hover
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight
+        });
+      }
+    }).addTo(map);
+
+  });
   // COLINDANTES
   fetch('colindantes.geojson')
   .then(res => res.json())
