@@ -98,8 +98,17 @@
           color: "green",
           fillColor: "green",
           fillOpacity: 0.5
+         },
+        onEachFeature: function (feature, layer) {
+          layer.on('click', function () {
+  document.getElementById("info").innerHTML =
+    "<b>areas_verdes:</b> " + 
+    (feature.properties.>Nombre || "Área verde");
+});
         }
       }).addTo(map);
+
+      map.fitBounds(colindantesLayer.getBounds());
     });
 
   // CONTROL DE CAPAS
