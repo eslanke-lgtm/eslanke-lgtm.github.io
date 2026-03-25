@@ -25,67 +25,64 @@
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
-  // DEMARCACIÓN
-  var demarcacionLayer;
+  var demarcacionLayer, colindantesLayer, areasLayer;
 
-fetch('demarcacion.geojson')
-  .then(res => res.json())
-  .then(data => {
-    demarcacionLayer = L.geoJSON(data, {
-      style: {
-        color: "black",
-        weight: 2,
-        fillOpacity: 0
-      }
-    }).addTo(map);
-  });
+  // DEMARCACIÓN
+  fetch('demarcacion.geojson')
+    .then(res => res.json())
+    .then(data => {
+      demarcacionLayer = L.geoJSON(data, {
+        style: {
+          color: "black",
+          weight: 2,
+          fillOpacity: 0
+        }
+      }).addTo(map);
+    });
 
   // COLINDANTES
-  var colindantesLayer;
+  fetch('colindantes.geojson')
+    .then(res => res.json())
+    .then(data => {
+      colindantesLayer = L.geoJSON(data, {
+        style: {
+          color: "#666",
+          weight: 1,
+          fillOpacity: 0.2
+        }
+      }).addTo(map);
 
-fetch('colindantes.geojson')
-  .then(res => res.json())
-  .then(data => {
-    colindantesLayer = L.geoJSON(data, {
-      style: {
-        color: "#666",
-        weight: 1,
-        fillOpacity: 0.2
-      }
-    }).addTo(map);
-  });
-
-    // 🔥 AJUSTAR MAPA A LA CAPA
-    map.fitBounds(colindantesLayer.getBounds());
-  });
+      // Ajustar mapa correctamente
+      map.fitBounds(colindantesLayer.getBounds());
+    });
 
   // ÁREAS VERDES
-  var areasLayer;
+  fetch('areas_verdes.geojson')
+    .then(res => res.json())
+    .then(data => {
+      areasLayer = L.geoJSON(data, {
+        style: {
+          color: "green",
+          fillColor: "green",
+          fillOpacity: 0.5
+        }
+      }).addTo(map);
+    });
 
-fetch('areas_verdes.geojson')
-  .then(res => res.json())
-  .then(data => {
-    areasLayer = L.geoJSON(data, {
-      style: {
-        color: "green",
-        fillColor: "green",
-        fillOpacity: 0.5
-      }
-    }).addTo(map);
-  });
+  // CONTROL DE CAPAS
+  setTimeout(() => {
+    var baseMaps = {};
+
+    var overlayMaps = {
+      "Demarcación municipal": demarcacionLayer,
+      "Municipios colindantes": colindantesLayer,
+      "Áreas verdes": areasLayer
+    };
+
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+  }, 1000);
 
 </script>
 
 </body>
 </html>
-setTimeout(() => {
-  var baseMaps = {};
-
-  var overlayMaps = {
-    "Demarcación municipal": demarcacionLayer,
-    "Municipios colindantes": colindantesLayer,
-    "Áreas verdes": areasLayer
-  };
-
-  L.control.layers(baseMaps, overlayMaps).addTo(map);
-}, 1000);
