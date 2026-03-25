@@ -8,22 +8,26 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <style>
-  body { margin: 0; }
-  #map { height: 100vh; }
+    body { margin: 0; }
+    #map { height: 100vh; }
 
-  #panel {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 250px;
-    background: white;
-    padding: 10px;
-    z-index: 1000;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    font-family: Arial;
-  }
-</style>
+    #panel {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 250px;
+      background: white;
+      padding: 10px;
+      z-index: 1000;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      font-family: Arial;
+    }
+  </style>
+</head>
+
+<body>
+
 <div id="panel">
   <h2>Atlas de Riesgos</h2>
   <p>Haz clic en un municipio</p>
@@ -43,66 +47,47 @@
 
   var demarcacionLayer, colindantesLayer, areasLayer;
 
-  // DEMARCACIÓN (con popup)
- fetch('demarcacion.geojson')
-  .then(res => res.json())
-  .then(data => {
-
-    function highlightFeature(e) {
-      var layer = e.target;
-      layer.setStyle({
-        weight: 3,
-        color: "#00BFFF",
-        fillOpacity: 0.1
-      });
-    }
-
-    function resetHighlight(e) {
-      demarcacionLayer.resetStyle(e.target);
-    }
-
-    demarcacionLayer = L.geoJSON(data, {
-      style: {
-        color: "black",
-        weight: 2,
-        fillOpacity: 0
-      },
-      onEachFeature: function (feature, layer) {
-
-        // Popup
-        if (feature.properties) {
-          layer.bindPopup(
-            "<b>Municipio:</b> " + 
-            (feature.properties.NOMGEO || "")
-          );
+  // DEMARCACIÓN (SIN HOVER, con panel)
+  fetch('demarcacion.geojson')
+    .then(res => res.json())
+    .then(data => {
+      demarcacionLayer = L.geoJSON(data, {
+        style: {
+          color: "black",
+          weight: 2,
+          fillOpacity: 0
+        },
+        onEachFeature: function (feature, layer) {
+          layer.on('click', function () {
+            document.getElementById("info").innerHTML =
+              "<b>Municipio:</b> " + 
+              (feature.properties.NOMGEO || "");
+          });
         }
-        });
-      }
-    }).addTo(map);
+      }).addTo(map);
+    });
 
-  });
   // COLINDANTES
   fetch('colindantes.geojson')
-  .then(res => res.json())
-  .then(data => {
-    colindantesLayer = L.geoJSON(data, {
-      style: {
-        color: "#666",
-        weight: 1,
-        fillOpacity: 0.2
-      },
-      onEachFeature: function (feature, layer) {
-        if (feature.properties) {
+    .then(res => res.json())
+    .then(data => {
+      colindantesLayer = L.geoJSON(data, {
+        style: {
+          color: "#666",
+          weight: 1,
+          fillOpacity: 0.2
+        },
+        onEachFeature: function (feature, layer) {
           layer.bindPopup(
             "<b>Municipio colindante:</b> " + 
             (feature.properties.NOMGEO || "")
           );
         }
-      }
-    }).addTo(map);
+      }).addTo(map);
 
-    map.fitBounds(colindantesLayer.getBounds());
-  });
+      map.fitBounds(colindantesLayer.getBounds());
+    });
+
   // ÁREAS VERDES
   fetch('areas_verdes.geojson')
     .then(res => res.json())
@@ -118,15 +103,13 @@
 
   // CONTROL DE CAPAS
   setTimeout(() => {
-    var baseMaps = {};
-
     var overlayMaps = {
       "Demarcación municipal": demarcacionLayer,
       "Municipios colindantes": colindantesLayer,
       "Áreas verdes": areasLayer
     };
 
-    L.control.layers(baseMaps, overlayMaps).addTo(map);
+    L.control.layers(null, overlayMaps).addTo(map);
   }, 1000);
 
 </script>
