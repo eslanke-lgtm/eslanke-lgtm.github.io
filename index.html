@@ -8,11 +8,27 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <style>
-    body { margin: 0; }
-    #map { height: 100vh; }
-  </style>
-</head>
-<body>
+  body { margin: 0; }
+  #map { height: 100vh; }
+
+  #panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 250px;
+    background: white;
+    padding: 10px;
+    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    font-family: Arial;
+  }
+</style>
+<div id="panel">
+  <h2>Atlas de Riesgos</h2>
+  <p>Haz clic en un municipio</p>
+  <div id="info"></div>
+</div>
 
 <div id="map"></div>
 
