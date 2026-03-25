@@ -26,15 +26,16 @@
 
     #leyenda {
       position: absolute;
-      bottom: 20px;
-      left: 10px;
-      background: white;
-      padding: 10px;
+      bottom: 10px;
+      right: 10px; /* 👈 esquina inferior derecha */
+      background: rgba(255,255,255,0.9);
+      padding: 8px;
       z-index: 1000;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
       font-family: Arial;
-      font-size: 14px;
+      font-size: 12px;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -47,10 +48,10 @@
 </div>
 
 <div id="leyenda">
-  <h4>Leyenda</h4>
-  <div><span style="color:black;">⬛</span> Demarcación</div>
-  <div><span style="color:#666;">⬛</span> Colindantes</div>
-  <div><span style="color:green;">⬛</span> Áreas verdes</div>
+  <b>Leyenda</b><br>
+  ⬛ <span style="color:black;">Demarcación</span><br>
+  ⬛ <span style="color:#666;">Colindantes</span><br>
+  ⬛ <span style="color:green;">Áreas verdes</span>
 </div>
 
 <div id="map"></div>
