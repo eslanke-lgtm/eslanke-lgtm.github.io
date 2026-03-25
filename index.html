@@ -27,7 +27,7 @@
 
   var demarcacionLayer, colindantesLayer, areasLayer;
 
-  // DEMARCACIÓN
+  // DEMARCACIÓN (con popup)
   fetch('demarcacion.geojson')
     .then(res => res.json())
     .then(data => {
@@ -36,6 +36,14 @@
           color: "black",
           weight: 2,
           fillOpacity: 0
+        },
+        onEachFeature: function (feature, layer) {
+          if (feature.properties) {
+            layer.bindPopup(
+              "<b>Municipio:</b> " + 
+              (feature.properties.NOMBRE || "Sin nombre")
+            );
+          }
         }
       }).addTo(map);
     });
@@ -52,7 +60,6 @@
         }
       }).addTo(map);
 
-      // Ajustar mapa correctamente
       map.fitBounds(colindantesLayer.getBounds());
     });
 
