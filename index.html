@@ -33,6 +33,24 @@
   <div id="info"></div>
 </div>
 
+<div id="leyenda">
+  <h4>Leyenda</h4>
+  <div><span style="color:black;">⬛</span> Demarcación</div>
+  <div><span style="color:#666;">⬛</span> Colindantes</div>
+  <div><span style="color:green;">⬛</span> Áreas verdes</div>
+  
+  #leyenda {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  font-family: Arial;
+  font-size: 14px;
+}
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
