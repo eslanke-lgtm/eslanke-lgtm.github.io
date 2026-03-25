@@ -40,16 +40,20 @@
 
   // COLINDANTES
   fetch('colindantes.geojson')
-    .then(res => res.json())
-    .then(data => {
-      L.geoJSON(data, {
-        style: {
-          color: "#666",
-          weight: 1,
-          fillOpacity: 0.2
-        }
-      }).addTo(map);
-    });
+  .then(res => res.json())
+  .then(data => {
+    var colindantesLayer = L.geoJSON(data, {
+      style: {
+        color: "red",
+        weight: 3,
+        fillColor: "red",
+        fillOpacity: 0.4
+      }
+    }).addTo(map);
+
+    // 🔥 AJUSTAR MAPA A LA CAPA
+    map.fitBounds(colindantesLayer.getBounds());
+  });
 
   // ÁREAS VERDES
   fetch('areas_verdes.geojson')
