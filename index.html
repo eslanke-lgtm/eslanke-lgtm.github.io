@@ -78,10 +78,11 @@
           fillOpacity: 0.2
         },
         onEachFeature: function (feature, layer) {
-          layer.bindPopup(
-            "<b>Municipio colindante:</b> " + 
-            (feature.properties.NOMGEO || "")
-          );
+          layer.on('click', function () {
+  document.getElementById("info").innerHTML =
+    "<b>Municipio colindante:</b> " + 
+    (feature.properties.NOMGEO || "");
+});
         }
       }).addTo(map);
 
