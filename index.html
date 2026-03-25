@@ -27,7 +27,7 @@
     #leyenda {
       position: absolute;
       bottom: 10px;
-      right: 10px; /* 👈 esquina inferior derecha */
+      right: 10px;
       background: rgba(255,255,255,0.9);
       padding: 8px;
       z-index: 1000;
@@ -36,6 +36,13 @@
       font-family: Arial;
       font-size: 12px;
       line-height: 1.4;
+    }
+
+    .box {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
     }
   </style>
 </head>
@@ -47,12 +54,7 @@
   <div id="info"></div>
 </div>
 
-<div id="leyenda">
-  <b>Leyenda</b><br>
-  ⬛ <span style="color:black;">Demarcación</span><br>
-  ⬛ <span style="color:#666;">Colindantes</span><br>
-  ⬛ <span style="color:green;">Áreas verdes</span>
-</div>
+<div id="leyenda"></div>
 
 <div id="map"></div>
 
@@ -122,7 +124,7 @@
       }).addTo(map);
     });
 
-  // CONTROL DE CAPAS
+  // CONTROL DE CAPAS + LEYENDA
   setTimeout(() => {
     var overlayMaps = {
       "Demarcación municipal": demarcacionLayer,
@@ -131,7 +133,32 @@
     };
 
     L.control.layers(null, overlayMaps).addTo(map);
+
+    actualizarLeyenda();
   }, 1000);
+
+  // FUNCIÓN LEYENDA DINÁMICA
+  function actualizarLeyenda() {
+    var html = "<b>Leyenda</b><br>";
+
+    if (map.hasLayer(demarcacionLayer)) {
+      html += "<span class='box' style='background:black;'></span> Demarcación<br>";
+    }
+
+    if (map.hasLayer(colindantesLayer)) {
+      html += "<span class='box' style='background:#666;'></span> Colindantes<br>";
+    }
+
+    if (map.hasLayer(areasLayer)) {
+      html += "<span class='box' style='background:green;'></span> Áreas verdes<br>";
+    }
+
+    document.getElementById("leyenda").innerHTML = html;
+  }
+
+  // EVENTOS
+  map.on('overlayadd', actualizarLeyenda);
+  map.on('overlayremove', actualizarLeyenda);
 
 </script>
 
