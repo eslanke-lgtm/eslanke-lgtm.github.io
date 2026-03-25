@@ -41,7 +41,7 @@
           if (feature.properties) {
             layer.bindPopup(
               "<b>Municipio:</b> " + 
-              (feature.properties.NOMBRE || "NOMGEO")
+              (feature.properties.NOMGEO || "")
             );
           }
         }
