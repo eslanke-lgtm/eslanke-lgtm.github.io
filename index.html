@@ -47,7 +47,7 @@
 
   var demarcacionLayer, colindantesLayer, areasLayer;
 
-  // DEMARCACIÓN (SIN HOVER, con panel)
+  // DEMARCACIÓN
   fetch('demarcacion.geojson')
     .then(res => res.json())
     .then(data => {
@@ -79,17 +79,17 @@
         },
         onEachFeature: function (feature, layer) {
           layer.on('click', function () {
-  document.getElementById("info").innerHTML =
-    "<b>Municipio colindante:</b> " + 
-    (feature.properties.NOMGEO || "");
-});
+            document.getElementById("info").innerHTML =
+              "<b>Municipio colindante:</b> " + 
+              (feature.properties.NOMGEO || "");
+          });
         }
       }).addTo(map);
 
       map.fitBounds(colindantesLayer.getBounds());
     });
 
-  // ÁREAS VERDES
+  // ÁREAS VERDES (SIN CLICK)
   fetch('areas_verdes.geojson')
     .then(res => res.json())
     .then(data => {
@@ -98,17 +98,8 @@
           color: "green",
           fillColor: "green",
           fillOpacity: 0.5
-         },
-        onEachFeature: function (feature, layer) {
-          layer.on('click', function () {
-  document.getElementById("info").innerHTML =
-    "<b>areas_verdes:</b> " + 
-    (feature.properties.>Nombre || "Área verde");
-});
         }
       }).addTo(map);
-
-      map.fitBounds(colindantesLayer.getBounds());
     });
 
   // CONTROL DE CAPAS
