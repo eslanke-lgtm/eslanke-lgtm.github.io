@@ -55,11 +55,12 @@
 
   <hr>
 
-  <!-- 🎚️ SLIDER CONTROLADO -->
-  <label>Opacidad raster</label><br>
-  <input id="opacitySlider" type="range" min="0" max="1" step="0.1" value="0.6"
-         disabled
-         oninput="if(rasterLayer){rasterLayer.setOpacity(this.value)}">
+  <!-- 🎚️ SLIDER QUE APARECE/DESAPARECE -->
+  <div id="sliderContainer" style="display:none;">
+    <label>Opacidad raster</label><br>
+    <input id="opacitySlider" type="range" min="0" max="1" step="0.1" value="0.6"
+           oninput="if(rasterLayer){rasterLayer.setOpacity(this.value)}">
+  </div>
 </div>
 
 <div id="leyenda"></div>
@@ -163,17 +164,17 @@
     L.control.layers(null, overlayMaps).addTo(map);
 
     actualizarLeyenda();
-    actualizarSlider(); // 🔥 importante
+    actualizarSlider();
   }, 1000);
 
-  // 🎚️ ACTIVAR/DESACTIVAR SLIDER
+  // 🎚️ MOSTRAR / OCULTAR SLIDER
   function actualizarSlider() {
-    var slider = document.getElementById("opacitySlider");
+    var contenedor = document.getElementById("sliderContainer");
 
     if (map.hasLayer(rasterLayer)) {
-      slider.disabled = false;
+      contenedor.style.display = "block";
     } else {
-      slider.disabled = true;
+      contenedor.style.display = "none";
     }
   }
 
