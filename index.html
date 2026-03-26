@@ -55,8 +55,10 @@
 
   <hr>
 
+  <!-- 🎚️ SLIDER CONTROLADO -->
   <label>Opacidad raster</label><br>
-  <input type="range" min="0" max="1" step="0.1" value="0.6"
+  <input id="opacitySlider" type="range" min="0" max="1" step="0.1" value="0.6"
+         disabled
          oninput="if(rasterLayer){rasterLayer.setOpacity(this.value)}">
 </div>
 
@@ -67,7 +69,7 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-  // 🧭 MAPA (zoom control movido)
+  // 🧭 MAPA
   var map = L.map('map', {
     zoomControl: false
   }).setView([19.8, -96.1], 10);
@@ -161,7 +163,19 @@
     L.control.layers(null, overlayMaps).addTo(map);
 
     actualizarLeyenda();
+    actualizarSlider(); // 🔥 importante
   }, 1000);
+
+  // 🎚️ ACTIVAR/DESACTIVAR SLIDER
+  function actualizarSlider() {
+    var slider = document.getElementById("opacitySlider");
+
+    if (map.hasLayer(rasterLayer)) {
+      slider.disabled = false;
+    } else {
+      slider.disabled = true;
+    }
+  }
 
   // LEYENDA
   function actualizarLeyenda() {
@@ -186,8 +200,15 @@
     document.getElementById("leyenda").innerHTML = html;
   }
 
-  map.on('overlayadd', actualizarLeyenda);
-  map.on('overlayremove', actualizarLeyenda);
+  map.on('overlayadd', function() {
+    actualizarLeyenda();
+    actualizarSlider();
+  });
+
+  map.on('overlayremove', function() {
+    actualizarLeyenda();
+    actualizarSlider();
+  });
 
 </script>
 
