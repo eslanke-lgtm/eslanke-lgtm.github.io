@@ -67,7 +67,12 @@
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
-  var demarcacionLayer, colindantesLayer, areasLayer;
+  var demarcacionLayer, colindantesLayer, areasLayer, rasterLayer;
+
+  // 🔥 RASTER (tiles)
+  var rasterLayer = L.tileLayer('{z}/{x}/{y}.png', {
+    opacity: 0.6
+  });
 
   // DEMARCACIÓN
   fetch('demarcacion.geojson')
@@ -129,7 +134,8 @@
     var overlayMaps = {
       "Demarcación municipal": demarcacionLayer,
       "Municipios colindantes": colindantesLayer,
-      "Áreas verdes": areasLayer
+      "Áreas verdes": areasLayer,
+      "Raster": rasterLayer
     };
 
     L.control.layers(null, overlayMaps).addTo(map);
@@ -151,6 +157,10 @@
 
     if (map.hasLayer(areasLayer)) {
       html += "<span class='box' style='background:green;'></span> Áreas verdes<br>";
+    }
+
+    if (map.hasLayer(rasterLayer)) {
+      html += "<span class='box' style='background:blue;'></span> Raster<br>";
     }
 
     document.getElementById("leyenda").innerHTML = html;
