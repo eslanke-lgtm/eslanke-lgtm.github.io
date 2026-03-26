@@ -68,9 +68,15 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
+  <script>
   var map = L.map('map', {
-  zoomControl: false
-}).setView([19.8, -96.1], 10);
+    zoomControl: false
+  }).setView([19.8, -96.1], 10);
+
+  // 🔥 AQUÍ ESTABA EL ERROR: faltaba esto
+  L.control.zoom({
+    position: 'bottomleft'
+  }).addTo(map);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
