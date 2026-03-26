@@ -52,6 +52,13 @@
 <div id="panel">
   <h2>Atlas de Riesgos</h2>
   <div id="info"></div>
+
+  <hr>
+
+  <!-- 🎚️ CONTROL DE OPACIDAD -->
+  <label>Opacidad raster</label><br>
+  <input type="range" min="0" max="1" step="0.1" value="0.6"
+         oninput="if(rasterLayer){rasterLayer.setOpacity(this.value)}">
 </div>
 
 <div id="leyenda"></div>
@@ -67,12 +74,17 @@
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
+  // 🧱 ORDEN DE CAPAS (PANE)
+  map.createPane('rasterPane');
+  map.getPane('rasterPane').style.zIndex = 200;
+
   var demarcacionLayer, colindantesLayer, areasLayer, rasterLayer;
 
-  // 🔥 RASTER (tiles)
-  var rasterLayer = L.tileLayer('{z}/{x}/{y}.png', {
-    opacity: 0.6
-  });
+  // 🔥 RASTER CORREGIDO
+  rasterLayer = L.tileLayer('tiles/raster/{z}/{x}/{y}.jpg', {
+    opacity: 0.6,
+    pane: 'rasterPane'
+  }).addTo(map); // ← se muestra desde inicio
 
   // DEMARCACIÓN
   fetch('demarcacion.geojson')
@@ -135,7 +147,7 @@
       "Demarcación municipal": demarcacionLayer,
       "Municipios colindantes": colindantesLayer,
       "Áreas verdes": areasLayer,
-      "Raster": rasterLayer
+      "Raster (Relieve)": rasterLayer
     };
 
     L.control.layers(null, overlayMaps).addTo(map);
@@ -143,7 +155,7 @@
     actualizarLeyenda();
   }, 1000);
 
-  // FUNCIÓN LEYENDA DINÁMICA
+  // LEYENDA DINÁMICA
   function actualizarLeyenda() {
     var html = "<b>Leyenda</b><br>";
 
@@ -160,13 +172,12 @@
     }
 
     if (map.hasLayer(rasterLayer)) {
-      html += "<span class='box' style='background:blue;'></span> Raster<br>";
+      html += "<span class='box' style='background:#999;'></span> Raster<br>";
     }
 
     document.getElementById("leyenda").innerHTML = html;
   }
 
-  // EVENTOS
   map.on('overlayadd', actualizarLeyenda);
   map.on('overlayremove', actualizarLeyenda);
 
